@@ -38,25 +38,58 @@ export default function TakeQuizPage() {
     }
   }, [quiz, router])
 
+  // useEffect(() => {
+  //   if (quiz && quizStarted && !quizCompleted) {
+  //     const currentQuestion = quiz.questions[currentQuestionIndex]
+  //     setTimeLeft(currentQuestion.timeLimit)
+
+  //     const timer = setInterval(() => {
+  //       setTimeLeft((prev) => {
+  //         if (prev <= 1) {
+  //           clearInterval(timer)
+  //           handleNextQuestion()
+  //           return 0
+  //         }
+  //         return prev - 1
+  //       })
+  //     }, 1000)
+
+  //     return () => clearInterval(timer)
+  //   }
+  // }, [currentQuestionIndex, quizStarted, quizCompleted, quiz])
+
+
+
+
   useEffect(() => {
     if (quiz && quizStarted && !quizCompleted) {
       const currentQuestion = quiz.questions[currentQuestionIndex]
       setTimeLeft(currentQuestion.timeLimit)
-
+  
       const timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
             clearInterval(timer)
-            handleNextQuestion()
+  
+            // Move handleNextQuestion logic here directly
+            if (currentQuestionIndex < quiz.questions.length - 1) {
+              setCurrentQuestionIndex(currentQuestionIndex + 1)
+            } else {
+              setQuizCompleted(true)
+            }
+  
             return 0
           }
           return prev - 1
         })
       }, 1000)
-
+  
       return () => clearInterval(timer)
     }
   }, [currentQuestionIndex, quizStarted, quizCompleted, quiz])
+  
+
+
 
   if (!quiz) {
     return null
